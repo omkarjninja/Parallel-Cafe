@@ -352,8 +352,14 @@
                 <div class="row width-narrower pageintro text-center">
                     <div class="column xl-12">
                         <p class="lead">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Alias eos quas blanditiis, quos sint nostrum fugit aperiam 
-                        inventore optio itaque molestias corporis, ipsa tenetur eligendi nihil iste porro, natus culpa consequuntur. 
+                            Planning a special event? Whether it's a cozy birthday celebration, a romantic Valentine's dinner, or a small gathering with friends and family, we’ve got you covered! 
+                            Our venue offers customizable decor, professional photography, and even live music to make your event truly memorable.
+                            <br>
+                            Please fill out the reservation form above, and our team will get in touch to confirm all the details. Feel free to let us know if you have any specific requests or 
+        themes in mind — we love adding that extra personal touch to your celebrations!
+        <br><br>
+        We recommend booking at least a few days in advance to secure your preferred date and time slot. For any urgent inquiries or same-day bookings, 
+        you can also reach us directly at <a href="tel:+9108845805">+91 9108845805</a>.
                         </p>
                     </div>                       
                 </div> <!-- end pageintro -->   
@@ -364,7 +370,7 @@
             </section> <!-- pagecontent --> 
 
         </article> <!-- end main content -->
-        <div class="reservation-container">
+        <!-- <div class="reservation-container">
             <div class="reservation-form">
                 <h2>Reservation Details</h2>
                 <form id="reservationForm">
@@ -437,8 +443,82 @@
                 <div id="dateSelected" class="date-selected"></div>
                 <div id="timeGrid" class="time-grid"></div>
             </div>
-        </div>
-        
+        </div> -->
+        <div class="reservation-container">
+    <div class="reservation-form">
+        <h2>Reservation Details</h2>
+        <form id="reservationForm">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+
+            <div class="form-group">
+                <label for="eventType">Event Type</label>
+                <select id="eventType" name="eventType" required>
+                    <option value="">Select an event type</option>
+                    <option value="casual">Casual Dining</option>
+                    <option value="business">Business Meeting</option>
+                    <option value="birthday">Birthday Celebration</option>
+                    <option value="anniversary">Anniversary</option>
+                    <option value="other">Other Special Occasion</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+
+            <div class="form-group">
+                <label>Addons</label>
+                <div class="addon-options">
+                    <div class="addon-option">
+                        <input type="checkbox" id="cake" name="addons" value="cake">
+                        <label for="cake">Celebration Cake</label>
+                    </div>
+                    <div class="addon-option">
+                        <input type="checkbox" id="flowers" name="addons" value="flowers">
+                        <label for="flowers">Table Flowers</label>
+                    </div>
+                    <div class="addon-option">
+                        <input type="checkbox" id="champagne" name="addons" value="champagne">
+                        <label for="champagne">Champagne</label>
+                    </div>
+                    <div class="addon-option">
+                        <input type="checkbox" id="decoration" name="addons" value="decoration">
+                        <label for="decoration">Special Decoration</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="notes">Special Requests</label>
+                <textarea id="notes" name="notes" rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-block">
+                    <span id="loadingSpinner" class="loading-spinner"></span>
+                    Confirm Reservation
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="time-slots">
+        <h2>Select Time</h2>
+        <p>Please select a date to view available time slots</p>
+        <div id="dateSelected" class="date-selected"></div>
+        <div id="timeGrid" class="time-grid"></div>
+    </div>
+</div>
+
 
         <!-- # gallery
         ================================================== -->
