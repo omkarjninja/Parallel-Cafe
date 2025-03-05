@@ -24,7 +24,192 @@
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="manifest" href="site.webmanifest">
+    <style>
 
+        :root {
+                    --primary-color: #C93F1B;
+                    --secondary-color: #fefae0;
+                    --background-color: #f5f5f5;
+                    --text-color: #333;
+                    --user-message-color: #e6f2ff;
+                    --bot-message-color: #f0f0f0;
+                }
+        
+                /* * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                }
+        
+                body {
+                    font-family: 'Arial', sans-serif;
+                    background-color: var(--background-color);
+                } */
+        
+                .chatbot-container {
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    width: 350px;
+                    background-color: white;
+                    border-radius: 10px;
+                    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+                    display: flex;
+                    flex-direction: column;
+                    overflow: hidden;
+                    max-height: 600px;
+                    transition: all 0.3s ease;
+                    z-index: 1000;
+                }
+        
+                .chatbot-header {
+                    background-color: var(--primary-color);
+                    color: white;
+                    padding: 15px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    cursor: pointer;
+                }
+        
+                .chatbot-header h3 {
+                    margin: 0;
+                    font-size: 18px;
+                }
+        
+                .chatbot-body {
+                    display: none;
+                    flex-direction: column;
+                    height: 450px;
+                }
+        
+                .chatbot-messages {
+                    flex-grow: 1;
+                    overflow-y: auto;
+                    padding: 15px;
+                    background-color: #f9f9f9;
+                }
+        
+                .message {
+                    margin-bottom: 15px;
+                    max-width: 80%;
+                    clear: both;
+                }
+        
+                .bot-message {
+                    float: left;
+                    background-color: var(--bot-message-color);
+                    border-radius: 10px 10px 10px 0;
+                    padding: 10px;
+                }
+        
+                .user-message {
+                    float: right;
+                    background-color: var(--user-message-color);
+                    border-radius: 10px 10px 0 10px;
+                    padding: 10px;
+                    text-align: right;
+                }
+        
+                .chatbot-input-area {
+                    display: flex;
+                    padding: 10px;
+                    background-color: white;
+                    border-top: 1px solid #eee;
+                }
+        
+                .chatbot-input {
+                    flex-grow: 1;
+                    padding: 10px;
+                    border: 1px solid #ddd;
+                    border-radius: 5px;
+                    margin-right: 10px;
+                }
+        
+                .chatbot-send-btn {
+                    background-color: var(--primary-color);
+                    color: white;
+                    border: none;
+                    padding: 10px 15px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                }
+        
+                .quick-actions {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 10px;
+                    margin-top: 5px;
+                    padding: 0 5px;
+                }
+        
+                .quick-action-btn {
+                    background-color: var(--secondary-color);
+                    color: var(--primary-color);
+                    border: none;
+                    padding: 3px 5px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-size: 12px;
+                }
+        
+                .typing-indicator {
+                    display: none;
+                    background-color: var(--bot-message-color);
+                    border-radius: 10px;
+                    padding: 10px;
+                    margin-bottom: 15px;
+                    max-width: 80%;
+                    float: left;
+                }
+        
+                .typing-indicator span {
+                    display: inline-block;
+                    width: 8px;
+                    height: 8px;
+                    background-color: #999;
+                    border-radius: 50%;
+                    margin-right: 4px;
+                    animation: typing 1.4s infinite;
+                }
+        
+                .typing-indicator span:nth-child(2) {
+                    animation-delay: 0.2s;
+                }
+        
+                .typing-indicator span:nth-child(3) {
+                    animation-delay: 0.4s;
+                }
+        
+                @keyframes typing {
+                    0%, 100% { opacity: 0.4; }
+                    50% { opacity: 1; }
+                }
+        
+                .chatbot-toggle {
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    background-color: var(--primary-color);
+                    color: white;
+                    border: none;
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 50%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    cursor: pointer;
+                    z-index: 1001;
+                    transition: transform 0.3s ease;
+                }
+        
+                .chatbot-toggle:hover {
+                    transform: scale(1.1);
+                }
+        
+            </style>
 </head>
 
 
@@ -617,12 +802,219 @@
         </footer> <!-- end s-footer -->
 
     </div> <!-- end page-wrap -->
+    <button class="chatbot-toggle" id="chatbotToggle">
+        💬
+    </button>
+
+    <div class="chatbot-container" id="chatbotContainer">
+        <div class="chatbot-header" id="chatbotHeader">
+            <h3>🤖 Cafe Assistant</h3>
+            <span id="minimizeChat">−</span>
+        </div>
+        
+        <div class="chatbot-body" id="chatbotBody">
+            <div class="chatbot-messages" id="chatMessages">
+                <!-- Messages will be dynamically added here -->
+            </div>
+
+            <div class="typing-indicator" id="typingIndicator">
+                <span></span>
+                <span></span>
+                <span></span>
+                Typing...
+            </div>
+
+            <div class="quick-actions" id="quickActions">
+                <button class="quick-action-btn" data-action="hours">Cafe Hours</button>
+                <!-- <button class="quick-action-btn" data-action="menu">View Menu</button> -->
+                <button class="quick-action-btn" data-action="reserve">Reservation</button>
+                <button class="quick-action-btn" data-action="location">Location</button>
+                <button class="quick-action-btn" data-action="contact">Contact</button>
+                <button class="quick-action-btn" data-action="MiniTheatre">MiniTheatre</button>
+                <button class="quick-action-btn" data-action="cabin">Cabin</button>
+                <button class="quick-action-btn" data-action="birthdayParty">Birthday Party</button>
+            </div>
+
+            <div class="chatbot-input-area">
+                <input type="text" class="chatbot-input" id="chatInput" placeholder="Type your message...">
+                <button class="chatbot-send-btn" id="sendMessage">Send</button>
+            </div>
+        </div>
+    </div>
 
 
     <!-- Java Script
     ================================================== -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="js/plugins.js"></script>
     <script src="js/main.js"></script>
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // DOM Elements
+        const chatbotToggle = document.getElementById('chatbotToggle');
+        const chatbotContainer = document.getElementById('chatbotContainer');
+        const chatbotBody = document.getElementById('chatbotBody');
+        const chatbotHeader = document.getElementById('chatbotHeader');
+        const minimizeChat = document.getElementById('minimizeChat');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendMessage = document.getElementById('sendMessage');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const quickActions = document.getElementById('quickActions');
+
+        // Chatbot Knowledge Base
+        const botKnowledge = {
+            greetings: [
+                "Hello! Welcome to our cafe. How can I assist you today?",
+                "Hi there! I'm your friendly cafe assistant. What can I help you with?",
+                "Greetings! Ready to explore our delightful cafe offerings?"
+            ],
+            hours: "We're open for whole week from 10:30 AM to 10:00 PM. We look forward to seeing you soon!",
+menu: "Our menu includes artisan coffee, freshly baked pastries, gourmet sandwiches, and delicious desserts. Would you like me to recommend something?",
+location: "We're located at Sedam Rd, opposite to MRMC Medical College, behind Mahindra Showroom, Badepur Colony, Kalaburagi, Karnataka 585102",
+reservation: "You can make a reservation through our online booking system. Would you like me to guide you?",
+contact: "You can reach us at +91 98457 77054 or +91 91088 45805, or email us at theparallelcafe@gmail.com",
+MiniTheatre: "Thank you for contacting *The Parallel Cafe*! 😊 Here are the Mini Theatre details on your fingertips:\n\n- 90 minutes session\n- 2 people (Couples): ₹499\n- 4 people: ₹799\n- 6 people: ₹999\n- Extra person: ₹149 each (Maximum 7-8 people allowed)\n\nWould you like to book a session?",
+Cabin: "We also offer private cabins starting at ₹199 per hour.\n\n✨ New: Candle Light Dinner Theme Cabin for ₹499 per hour!\n\nWould you like to book a cabin?",
+BirthdayParty: "Planning a birthday party? We have packages ranging from Basic to Luxury starting at just ₹1499 and going up to ₹24,999. Would you like me to share more details or help you book?",
+
+
+        };
+
+        // Chatbot Responses
+        const botResponses = {
+            questions: [
+                { keywords: ['hours', 'open', 'time'], response: botKnowledge.hours },
+                // { keywords: ['menu', 'food', 'drink'], response: botKnowledge.menu },
+                { keywords: ['location', 'address', 'where'], response: botKnowledge.location },
+                { keywords: ['reservation', 'book', 'table'], response: botKnowledge.reservation },
+                { keywords: ['contact', 'phone', 'email'], response: botKnowledge.contact }
+            ]
+        };
+
+        // Simulate Bot Typing
+        function simulateTyping(callback) {
+            typingIndicator.style.display = 'block';
+            setTimeout(() => {
+                typingIndicator.style.display = 'none';
+                callback();
+            }, 1000);
+        }
+
+        // Add Message to Chat
+        function addMessage(message, type = 'bot') {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', `${type}-message`);
+            messageDiv.textContent = message;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Generate Bot Response
+        function generateResponse(userMessage) {
+            const lowerMessage = userMessage.toLowerCase();
+
+            // Check greeting
+            if (['hi', 'hello', 'hey'].some(greeting => lowerMessage.includes(greeting))) {
+                return botKnowledge.greetings[Math.floor(Math.random() * botKnowledge.greetings.length)];
+            }
+
+            // Check predefined questions
+            for (let item of botResponses.questions) {
+                if (item.keywords.some(keyword => lowerMessage.includes(keyword))) {
+                    return item.response;
+                }
+            }
+
+            // Default response
+            return "I'm not sure I understand. Could you rephrase that or try one of the quick actions?";
+        }
+
+        // Send Message Handler
+        function handleSendMessage() {
+            const userMessage = chatInput.value.trim();
+            if (!userMessage) return;
+
+            addMessage(userMessage, 'user');
+            chatInput.value = '';
+
+            simulateTyping(() => {
+                const botResponse = generateResponse(userMessage);
+                addMessage(botResponse);
+            });
+        }
+
+        // Quick Action Handlers
+        function handleQuickAction(action) {
+            switch(action) {
+                case 'hours':
+                    addMessage(botKnowledge.hours);
+                    break;
+                // case 'menu':
+                //     addMessage(botKnowledge.menu);
+                //     break;
+                case 'reserve':
+                    addMessage(botKnowledge.reservation);
+                    break;
+                case 'location':
+                    addMessage(botKnowledge.location);
+                    break;
+                case 'contact':
+                    addMessage(botKnowledge.contact);
+                    break;
+                case 'MiniTheatre':
+                    addMessage(botKnowledge.MiniTheatre);
+                    break;
+                case 'cabin':
+                    addMessage(botKnowledge.Cabin);
+                    break;
+                case 'birthdayParty':
+                    addMessage(botKnowledge.BirthdayParty);
+                    break;
+            }
+        }
+
+        // Event Listeners
+        chatbotToggle.addEventListener('click', () => {
+            chatbotContainer.style.display = 'block';
+            chatbotBody.style.display = 'flex';
+            chatbotToggle.style.display = 'none';
+        });
+
+        minimizeChat.addEventListener('click', () => {
+            chatbotContainer.style.display = 'none';
+            chatbotToggle.style.display = 'flex';
+        });
+
+        sendMessage.addEventListener('click', handleSendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSendMessage();
+        });
+
+        quickActions.addEventListener('click', (e) => {
+            if (e.target.classList.contains('quick-action-btn')) {
+                const action = e.target.dataset.action;
+                handleQuickAction(action);
+            }
+        });
+
+        // Initial Welcome Message
+        addMessage(botKnowledge.greetings[0]);
+    </script>
 
 </body>
 </html>
